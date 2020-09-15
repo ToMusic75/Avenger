@@ -1,0 +1,3 @@
+Evolution : (par exemple pour un évènement pour un bouton ou un clic souris) :
+De mieux en mieux, plus simple pour le code
+classe -> classe anonyme -> expression lambda

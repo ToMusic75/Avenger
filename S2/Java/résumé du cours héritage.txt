@@ -1,0 +1,103 @@
+POO (2) : Héritage
+
+I. Mise en place
+def : technique objet ayant vocation à fabriquer une classe à partir d'une autre classe
+
+      X    classe de base, super classe, classe parente, classe mère
+      ^
+      |    héritage ou dérivation (traduit la relation etre)
+      Y    classe dérivée, sous classe, classe fille, classe enfant
+
+
+Syntaxe
+  public class X {
+    ...
+  }
+
+  public class Y extends X {
+
+  }
+
+
+propriétés essentielles :
+* Privé dans une classe de base est inaccessible dans une classe dérivée
+* Compatibilité de types
+  objet Base = objet Dérivé
+* redéfinition
+* polymorphisme = Compatibilité + redéfinition
+
+Pbm des constructeurs
+
+
+II. Introspection
+Pbm : auto-complétion
+      android = fichier graphique
+      <button x="10" />
+
+def : capacité d'une classe à s'examiner (cad à pouvoir retrouver tout ce qu'elle contient, voire à le modifier)
+
+Solution : Class
+
+Fabrication :
+      Class<?> mClass = Class.forName("java.lang.String");
+               nom qualifié
+
+      X x = new X();
+      Class<?> mClass = x.getClass();
+
+      Class<?> mClass = X.class;
+
+
+Utilisation :
+     getName()
+     getSuperClass()
+     getMethods() ou getDeclaredMethods()
+     getFields() ou getDeclaredFields()
+     getInterfaces()
+     getConstructors() ...
+
+Exo :
+    - afficher l'arbre d'héritage d'une classe, dont le nom qualifié sera saisi
+    - déterminer s'il existe une méthode truc/substring de paramètre int, int dans la classe string
+    - pour vous amuser (mais pas maintenant), décoder par exemple un fichier contenant des lignes de texte
+      comme"<java.lang.String value='exemple'/>", avec un type quelconque
+
+
+III. Abstraction et interfaces
+Pbm : bib graphique => ttmt évenementiel
+
+public abstract class X {
+    private int x;
+    public abstract type f(....);
+    void g() {
+      ...
+    }
+}
+
+X x = new X(); erreur de compilation
+
+Exemple :
+                   class Salarie             abstract class Salarie
+                      nom, ...                 nom
+                      double calcsal(){     => abstract double calcsal();
+                                                setNom(String nom) { this;nom = nom; }
+                      }
+
+          ^               ^                              ^
+          |               |                              |
+      class CDI        class CDD                  class TPartiel
+        salaire         salaire                     nbh
+                        prime                       tarifhoraire
+    double calcsal(){   double calcsal(){           double calcsal(){
+      return salaire;      return salaire + prime;    return nbh * tarifhoraire;
+    }                    }                          }
+
+ArrayList<Salarie> array = new  ArrayList<Salarie>();
+array.add(new CDI("decrouez", 4500));
+array.add(new TPartiel("brandon", 450));
+...
+
+double sum = 0.;
+for(Salarie salarie : array) {
+  sum+= salarie.calsal();
+}

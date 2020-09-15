@@ -1,0 +1,12 @@
+schémas hdfs, schema map reduce, yarn, 
+formats de stockage (json, parquet, xml etc), 
+scalabilité horizontale et verticale
+
+vertical : on multiplie la puissance d'une machine
+horizontal : on multiplie le nombre de machines
+on peut rassembler les 2 scaling
+
+Pourquoi on a inventé hadoop ?
+
+Hadoop utilise 3 choses ?
+scalabilité (multipilier), résiliance (haute disponibilité), et consistance

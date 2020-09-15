@@ -1,0 +1,89 @@
+1)
+CREATE OR REPLACE TRIGGER exercice1
+  BEFORE INSERT
+  ON EMPLOYE
+  FOR EACH ROW
+  DECLARE
+  
+BEGIN
+  if :new.salaire is null then
+    :new.salaire := 1480
+  end if;
+END;
+===================================================
+2)
+CREATE OR REPLACE TRIGGER exercice2
+  BEFORE INSERT
+  ON EMPLOYE
+  FOR EACH ROW
+  
+BEGIN
+  if LOWER(:new.ville) = LOWER('Paris') then
+    :new.salaire := :new.salaire*1.10;
+    else
+    :new.salaire := :new.salaire*1.05;
+    end if;
+END;
+====================================================
+3)
+CREATE OR REPLACE TRIGGER exercice3
+  BEFORE INSERT OR UPDATE 
+  ON EMPLOYE
+  FOR EACH ROW
+  
+BEGIN
+  IF UPDATING('nom') then
+  :new.nom := UPPER(:new.nom);
+  end if;
+  IF UPDATING('prenom') then
+  :new.prenom := CONCAT(UPPER(SUBSTR(:new.prenom,1,1)),
+				LOWER(SUBSTR(:new.prenom,2,LENGTH(:new.prenom)-1)));
+  end if;
+  
+END;
+====================================================
+4)
+CREATE OR REPLACE TRIGGER exercice4
+  BEFORE INSERT OR UPDATE 
+  ON EMPLOYE
+  FOR EACH ROW
+BEGIN
+  IF UPDATING('embauche') then
+    if :new.embauche > extract(year from sysdate) then
+      :new.embauche := :old.embauche;
+    end if;
+  else
+    if :new.embauche > extract(year from sysdate) then
+      :new.embauche := extract(year from sysdate);
+    end if;  
+  end if;
+END;
+====================================================
+5)
+CREATE OR REPLACE TRIGGER exercice5
+  BEFORE UPDATE 
+  ON EMPLOYE
+  FOR EACH ROW
+BEGIN
+  IF UPDATING('prenom') then
+    if INSTR(:old.prenom,'-') > 0 then
+      :new.prenom := :old.prenom;
+    end if;
+  end if;
+END;
+====================================================
+6)
+CREATE TABLE HISTORIQUE
+(
+  nom varchar2(255) default NULL,
+  prenom varchar2(255) default NULL,
+  adresse varchar2(255) default NULL,
+  ville varchar2(255)
+);
+CREATE OR REPLACE TRIGGER exercice6
+  BEFORE DELETE 
+  ON EMPLOYE
+  FOR EACH ROW
+BEGIN
+  INSERT INTO HISTORIQUE(nom, prenom, adresse, ville) VALUES(:old.nom,:old.prenom,:old.adresse,:old.ville);
+END;

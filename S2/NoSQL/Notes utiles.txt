@@ -1,0 +1,3 @@
+sandbox (nosql avec LOAD CSV WITH HEADERS FROM ...)
+
+googlecollab + mongodb avec python

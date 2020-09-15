@@ -1,0 +1,1 @@
+reviser kera (fonction fit, classe Dense)

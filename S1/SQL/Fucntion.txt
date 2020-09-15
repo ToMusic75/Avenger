@@ -1,0 +1,13 @@
+CREATE FUNCTION SOMME(n IN INTEGER)
+    RETURN INTEGER
+    IS
+    res INTEGER := 0;
+    i INTEGER := 0;
+BEGIN
+    LOOP
+    res := res + i;
+    i := i + 1;
+    EXIT WHEN [i = n];
+    END LOOP;
+    RETURN res;
+END;

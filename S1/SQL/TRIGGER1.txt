@@ -1,0 +1,10 @@
+CREATE TRIGGER TRG_EX1
+AFTER INSERT
+ON TP
+
+DECLARE
+salaire TP.salaire%
+
+BEGIN
+
+End;

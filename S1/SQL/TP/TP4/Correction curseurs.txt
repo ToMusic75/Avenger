@@ -1,0 +1,150 @@
+
+-- Exercice 1
+DECLARE 
+  CURSOR cur_min_max is SELECT LENGTH(description),description from ARTICLE;
+  max_val INTEGER :=0;
+  max_desc ARTICLE.description%TYPE;
+  taille INTEGER;
+  descp ARTICLE.description%TYPE;
+BEGIN
+  OPEN cur_min_max;
+  LOOP
+    FETCH cur_min_max INTO taille,descp;
+    
+    if taille>max_val then
+    max_val := taille;
+    max_desc := descp;
+    end if;
+   EXIT WHEN cur_min_max%NOTFOUND;
+    
+  END LOOP;
+  CLOSE cur_min_max;
+   DBMS_OUTPUT.PUT_LINE(max_desc);
+END;
+
+-- Exercice 2
+
+DECLARE 
+  CURSOR cur_som is SELECT SUM(prix) from ARTICLE;
+  CURSOR cur_art is SELECT description,prix from ARTICLE;
+  total_prix 	INTEGER :=0;
+  current_prix 	ARTICLE.description%TYPE;
+  descp 		ARTICLE.description%TYPE;
+BEGIN
+  OPEN cur_som;
+  LOOP
+    FETCH cur_som INTO total_prix;
+    
+   EXIT WHEN cur_som%NOTFOUND;
+    
+  END LOOP;
+  CLOSE cur_som;
+  OPEN cur_art;
+  LOOP
+    FETCH cur_art INTO current_prix,descp;
+    DBMS_OUTPUT.PUT_LINE(descp || (current_prix/total_prix)*100 || '%');
+   EXIT WHEN cur_art%NOTFOUND;
+    
+  END LOOP;
+  CLOSE cur_art;
+  
+END;
+
+-- Exercice 3
+DECLARE 
+  CURSOR cur_moy_coeff is SELECT AVG(coefficient) from ARTICLE;
+  CURSOR cur_coeff is SELECT coefficient,numero from ARTICLE;
+  moyenne_coef 	FLOAT :=0;
+  current_coef 	ARTICLE.coefficient%TYPE;
+  current_numero ARTICLE.coefficient%TYPE;
+BEGIN
+  OPEN cur_moy_coeff;
+  LOOP
+    FETCH cur_moy_coeff INTO moyenne_coef;
+    
+   EXIT WHEN cur_moy_coeff%NOTFOUND;
+    
+  END LOOP;
+  CLOSE cur_moy_coeff;
+  
+  OPEN cur_coeff;
+  LOOP
+    FETCH cur_coeff INTO current_coef,current_numero;
+    UPDATE ARTICLE SET prix = 1.17*prix WHERE numero = current_numero;
+   EXIT WHEN cur_coeff%NOTFOUND;
+    
+  END LOOP;
+  CLOSE cur_coeff;
+  
+END;
+
+--Exercice 4
+
+CREATE TABLE ARTICLE_AVG (
+  code number PRIMARY KEY,
+  prix number default NULL,
+  description VARCHAR(200) default NULL,
+  coefficient number default NULL
+);
+
+
+DECLARE 
+  CURSOR cur_moy_prix is SELECT AVG(prix) from ARTICLE;
+  CURSOR cur_art is SELECT * from ARTICLE;
+  moyenne_prix 	FLOAT :=0;
+  c_numero 			ARTICLE.numero%TYPE;
+  c_prix 			ARTICLE.prix%TYPE;
+  c_coefficient		ARTICLE.coefficient%TYPE
+  c_description		ARTICLE.description%TYPE
+BEGIN
+  OPEN cur_moy_prix;
+  LOOP
+    FETCH cur_moy_prix INTO moyenne_prix;
+    
+   EXIT WHEN cur_moy_prix%NOTFOUND;
+    
+  END LOOP;
+  CLOSE cur_moy_prix;
+  
+  OPEN cur_art;
+  LOOP
+    FETCH cur_art INTO c_numero,c_prix,c_description,c_coefficient;
+	IF c_prix<moyenne_prix  THEN
+		INSERT INTO ARTICLE_AVG VALUES(c_numero,c_prix,c_description,c_coefficient);
+	ENDIF;
+    
+   EXIT WHEN cur_art%NOTFOUND;
+    
+  END LOOP;
+  CLOSE cur_art;
+  
+END;
+
+
+-- Exercice 5
+CREATE OR REPLACE TRIGGER trg_art BEFORE INSERT ON ARTICLE
+DECLARE
+	CURSOR cur_max_price is SELECT MAX(prix) from ARTICLE where coefficient=:NEW.coefficient;
+	max_prix INTEGER;
+BEGIN
+	OPEN cur_max_price;
+	LOOP
+    FETCH cur_max_price INTO max_prix;
+	
+	IF :NEW.prix > 1.1 * max_prix then
+		:NEW.prix := max_prix
+	endif;
+    
+   EXIT WHEN cur_max_price%NOTFOUND;
+    
+  END LOOP;
+  CLOSE cur_max_price;
+	
+END;
+
+
+
+
+
+
+

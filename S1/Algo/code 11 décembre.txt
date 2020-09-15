@@ -1,0 +1,23 @@
+int max(int a, int b){
+    if (a > b){
+        return a;
+    }
+    else {
+        return b;
+    }
+}
+
+void removeRootHeap(Array tab){
+    tab.swap(0, tab.size() - 1);
+    int i = 0;
+    while (tab[i] < tab[i*2 + 1] && tab[i] < t﻿‌﻿‍﻿‌‌‌﻿ab[i*2 + 2]){
+        if (2 fils){
+            int j = max(tab[i*2 + 1], tab[i*2 + 2]);
+            tab.swap(tab[i], j);
+            i++;
+        }
+        if (1 fils){
+            tab.swap(tab[i], tab[i*2 + 1]);
+        }
+    }
+}
